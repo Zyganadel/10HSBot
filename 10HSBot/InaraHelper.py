@@ -27,7 +27,6 @@ class InaraHelper:
         status = reply['header']['eventStatus'];
         pass;
 
-
     pass;
 
 
