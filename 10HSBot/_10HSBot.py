@@ -37,7 +37,9 @@ async def test(ctx:discord.ext.commands.Context, username: str):
     dt = datetime.utcnow();
     dtString = dt.isoformat()[:19]+'Z';
     data={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
-    jsonData = json.JSONEncoder.encode(data);
+    jsonData = json.JSONEncoder.encode(o=data);
+    print(data);
+    print(jsonData);
     response = requests.post('https://inara.cz/inapi/v1/', headers=headers, data=jsonData);
     reply = response.json();
     status = reply['header']['eventStatus'];
