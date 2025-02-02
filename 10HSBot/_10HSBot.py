@@ -38,6 +38,8 @@ async def test(ctx:discord.ext.commands.Context, username: str):
     params={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
     y = requests.get('https://inara.cz/inapi/v1/', headers=headers, params=params);
     print(username);
+    print(y.text);
+    print(y.content);
     await ctx.send('This command is not implemented yet.');
     pass;
 
