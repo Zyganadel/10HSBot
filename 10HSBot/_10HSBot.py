@@ -66,6 +66,7 @@ async def test(ctx:Context, username: str):
     role=ctx.guild.get_role(roleID);
     await user.add_roles(role, reason='User initiated linking.');
     await user.edit(nick=f'CMDR {username}');
+    await ctx.send(f'CMDR {username}, your role was updated to {role.name}.');
     pass;
 
 @bot.event
