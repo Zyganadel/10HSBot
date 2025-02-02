@@ -32,7 +32,7 @@ async def test(ctx:discord.ext.commands.Context, message: str):
 
 @bot.hybrid_command(name='link', with_app_command=True)
 async def test(ctx:discord.ext.commands.Context, username: str):
-    headers={'appName':'10HSBot','appVersion':version,'APIkey':inraToken,'isBeingDeveloped':True};
+    headers={'appName':'10HSBot','appVersion':version,'APIkey':inraToken,'isBeingDeveloped':'True'};
     dt = datetime.utcnow();
     dtString = dt.isoformat()[:19]+'Z';
     params={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
