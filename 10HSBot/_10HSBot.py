@@ -8,6 +8,8 @@ import json
 intents = discord.Intents.default();
 intents.message_content = True;
 
+encoder = json.JSONEncoder();
+
 version = '0.0.1';
 
 dsToken = input('Input 10hs bot token');
@@ -33,11 +35,14 @@ async def test(ctx:discord.ext.commands.Context, message: str):
 
 @bot.hybrid_command(name='link', with_app_command=True)
 async def test(ctx:discord.ext.commands.Context, username: str):
-    headers={'appName':'10HSBot','appVersion':version,'APIkey':inraToken};
+    headers={'header':{'appName':'10HSBot','appVersion':version,'APIkey':inraToken}};
     dt = datetime.utcnow();
     dtString = dt.isoformat()[:19]+'Z';
     data={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
-    jsonData = json.JSONEncoder.encode(o=data);
+    jsonHeaders = encoder.encode(o=headers);
+    jsonData = encoder.encode(o=data);
+    print(headers);
+    print(jsonHeaders);
     print(data);
     print(jsonData);
     response = requests.post('https://inara.cz/inapi/v1/', headers=headers, data=jsonData);
