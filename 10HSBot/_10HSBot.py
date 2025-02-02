@@ -1,6 +1,8 @@
 from datetime import datetime
 import discord
 import discord.ext.commands
+from discord.ext.commands import Context
+from discord.abc import Snowflake
 import requests
 import json
 
@@ -8,6 +10,7 @@ from InaraHelper import InaraHelper
 from InaraHelper import InaraData
 
 intents = discord.Intents.default();
+intents.members=True;
 intents.message_content = True;
 
 encoder = json.JSONEncoder();
@@ -15,7 +18,7 @@ encoder = json.JSONEncoder();
 version = '4.0.4';
 
 allies = [5823,2373];
-roles = {'ally':-1,'recruit':-1,'guest':-1}
+roles = {'ally':1178557540032847935,'recruit':1178557540032847935,'guest':1254322009383501835}
 
 dsToken = input('Input 10hs bot token');
 InaraHelper.inaraKey = input('Input inara token');
@@ -33,13 +36,13 @@ async def on_ready():
 
 
 @bot.hybrid_command(name='test', with_app_command=True)
-async def test(ctx:discord.ext.commands.Context, message: str):
+async def test(ctx:Context, message: str):
     print(message);
     await ctx.send('hi');
     pass;
 
 @bot.hybrid_command(name='link', with_app_command=True)
-async def test(ctx:discord.ext.commands.Context, username: str):
+async def test(ctx:Context, username: str):
     # header = {'appName':'EDDI','appVersion':version,'APIkey':inraToken};
     # dt = datetime.utcnow();
     # dtString = dt.isoformat()[:19]+'Z';
@@ -54,6 +57,26 @@ async def test(ctx:discord.ext.commands.Context, username: str):
     # status = reply['header']['eventStatus'];
     # print(IsCommanderRegistered(reply));
     # await ctx.send(reply);
+
+    # Get data
+    roleID:int = SolveRoleIDForCMDR(username);
+    user:discord.Member = ctx.author;
+    
+    # Assign role
+    role=ctx.guild.get_role(roleID);
+    await user.add_roles(role, reason='User initiated linking.');
+    await user.edit(nick=f'CMDR {username}');
+    pass;
+
+@bot.event
+async def on_member_join(member: discord.Member):
+    # Get data
+    roleID:int = SolveRoleIDForCMDR(member.display_name);
+    
+    # Assign role
+    role=member.guild.get_role(roleID);
+    await member.add_roles(role, reason='Automated linking.');
+    await member.edit(nick=f'CMDR {member.display_name}');
     pass;
 
 def SolveRoleIDForCMDR(name:str):
