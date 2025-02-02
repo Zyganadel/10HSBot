@@ -1,5 +1,6 @@
-import datetime
+from datetime import datetime
 from json import JSONEncoder
+import requests
 
 
 class InaraHelper:
@@ -22,7 +23,7 @@ class InaraHelper:
         print(dataFormatted);
         print(data);
         print(jsonData);
-        response = InaraHelper.requests.post('https://inara.cz/inapi/v1/', data=jsonData);
+        response = requests.post('https://inara.cz/inapi/v1/', data=jsonData);
         reply = response.json();
         status = reply['header']['eventStatus'];
         return InaraData(reply);
