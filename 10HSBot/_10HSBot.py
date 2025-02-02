@@ -36,11 +36,13 @@ async def test(ctx:discord.ext.commands.Context, username: str):
     dt = datetime.utcnow();
     dtString = dt.isoformat()[:19]+'Z';
     params={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
-    y = requests.get('https://inara.cz/inapi/v1/', headers=headers, params=params);
+    y = requests.post('https://inara.cz/inapi/v1/', headers=headers, params=params);
+    await ctx.send('This command is not implemented yet.');
     print(username);
     print(y.text);
-    print(y.content);
-    await ctx.send('This command is not implemented yet.');
+    print(y.content.decode());
+    print(y.headers);
+    print(y.status_code);
     pass;
 
 bot.run(dsToken);
