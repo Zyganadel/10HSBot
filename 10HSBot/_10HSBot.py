@@ -69,4 +69,20 @@ def IsCommanderRegistered(data:dict):
     except: pass;
     return False;
 
+def RecruitCommander(name:str):
+    data = InaraHelper.GetCMDRData(name);
+    roleID:int;
+    # if data invalid, make them a guest.
+    if(not data.isValid): roleID = roles['guest'];
+    # else read their squadron data if any, and assign roles based on it.
+    else:
+        affiliation:int=-1;
+        if(data.wingId != -1): affiliation = data.wingId;
+        if(data.squadronId != -1): affiliation = data.squadronId;
+
+        if(affiliation == -1 or affiliation == 665): roleID = roles['recruit'];
+        elif(affiliation in allies): roleID = roles['ally'];
+        else: roleID = roles['guest'];
+    return roleID;
+
 bot.run(dsToken);
