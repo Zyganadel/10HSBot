@@ -40,12 +40,9 @@ async def test(ctx:discord.ext.commands.Context, username: str):
     response = requests.post('https://inara.cz/inapi/v1/', headers=headers, data=data);
     reply = response.json();
     status = reply['header']['eventStatus'];
-    await ctx.send('This command is not implemented yet.');
+    statusText = reply['header']['eventStatusText'];
+    print(status);
     print(username);
-    print(response.text);
-    print(response.content.decode());
-    print(response.headers);
-    print(response.json());
     print(response.status_code);
     pass;
 
