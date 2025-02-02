@@ -1,0 +1,3 @@
+yoink usernames from people on join and compare against inara names.
+if they exist in inara database, set nick and assign recruit.
+let people link to streamline recruitment process.
