@@ -18,7 +18,7 @@ encoder = json.JSONEncoder();
 version = '4.0.4';
 
 allies = [5823,2373];
-roles = {'ally':1178557540032847935,'recruit':1178557540032847935,'guest':1254322009383501835}
+roles = {'ally':758089412515987496,'recruit':401075831885004802,'guest':0}
 
 dsToken = input('Input 10hs bot token');
 InaraHelper.inaraKey = input('Input inara token');
