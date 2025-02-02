@@ -47,7 +47,7 @@ async def test(ctx:discord.ext.commands.Context, username: str):
     response = requests.post('https://inara.cz/inapi/v1/', data=jsonData);
     reply = response.json();
     status = reply['header']['eventStatus'];
-    statusText = reply['header']['eventStatusText'];
+    # statusText = reply['header']['eventStatusText'];
     print(status);
     print(username);
     print(response.status_code);
