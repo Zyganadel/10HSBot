@@ -40,34 +40,21 @@ async def test(ctx:discord.ext.commands.Context, message: str):
 
 @bot.hybrid_command(name='link', with_app_command=True)
 async def test(ctx:discord.ext.commands.Context, username: str):
-    header = {'appName':'EDDI','appVersion':version,'APIkey':inraToken};
-    dt = datetime.utcnow();
-    dtString = dt.isoformat()[:19]+'Z';
-    data={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
-    dataFormatted={'header':header,'events':[data]};
-    jsonData = encoder.encode(o=dataFormatted);
-    print(dataFormatted);
-    print(data);
-    print(jsonData);
-    response = requests.post('https://inara.cz/inapi/v1/', data=jsonData);
-    reply = response.json();
-    status = reply['header']['eventStatus'];
-    print(IsCommanderRegistered(reply));
-    await ctx.send(reply);
+    # header = {'appName':'EDDI','appVersion':version,'APIkey':inraToken};
+    # dt = datetime.utcnow();
+    # dtString = dt.isoformat()[:19]+'Z';
+    # data={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
+    # dataFormatted={'header':header,'events':[data]};
+    # jsonData = encoder.encode(o=dataFormatted);
+    # print(dataFormatted);
+    # print(data);
+    # print(jsonData);
+    # response = requests.post('https://inara.cz/inapi/v1/', data=jsonData);
+    # reply = response.json();
+    # status = reply['header']['eventStatus'];
+    # print(IsCommanderRegistered(reply));
+    # await ctx.send(reply);
     pass;
-
-# A function to determine if a commander is in the squadron or not.
-def IsCommanderRegistered(data:dict):
-    cmdrData = data['events'][0]['eventData'];
-    try:
-        squadID = cmdrData['commanderSquadron']['squadronID'];
-        if(squadID == 665): return True;
-    except: pass;
-    try:
-        wingID = cmdrData['commanderSquadron']['wingID'];
-        if (wingID == 665): return True;
-    except: pass;
-    return False;
 
 def SolveRoleIDForCMDR(name:str):
     data = InaraHelper.GetCMDRData(name);
