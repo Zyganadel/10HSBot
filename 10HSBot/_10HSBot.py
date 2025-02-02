@@ -22,7 +22,7 @@ async def on_ready():
 @bot.hybrid_command(name='test', with_app_command=True)
 async def test(ctx:discord.ext.commands.Context, message: str):
     print(message);
-    await ctx.send('cat');
+    await ctx.send('hi');
     pass;
 
 @bot.hybrid_command(name='link', with_app_command=True)
