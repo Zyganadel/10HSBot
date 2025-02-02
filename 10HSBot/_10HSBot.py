@@ -10,7 +10,7 @@ intents.message_content = True;
 
 encoder = json.JSONEncoder();
 
-version = '0.0.1';
+version = '4.0.4';
 
 dsToken = input('Input 10hs bot token');
 inraToken = input('Input inara token');
@@ -35,7 +35,7 @@ async def test(ctx:discord.ext.commands.Context, message: str):
 
 @bot.hybrid_command(name='link', with_app_command=True)
 async def test(ctx:discord.ext.commands.Context, username: str):
-    header = {'appName':'10HSBot','appVersion':version,'APIkey':inraToken};
+    header = {'appName':'EDDI','appVersion':version,'APIkey':inraToken};
     dt = datetime.utcnow();
     dtString = dt.isoformat()[:19]+'Z';
     data={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
