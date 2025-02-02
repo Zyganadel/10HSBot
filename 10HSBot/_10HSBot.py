@@ -18,7 +18,7 @@ bot = discord.ext.commands.Bot(command_prefix='h!', intents=intents);
 @bot.event
 async def on_ready():
     dt = datetime.utcnow();    
-    print(f'Logged in as {client.user} at {dt.isoformat()}');
+    print(f'Logged in as {client.user} at {dt.isoformat()[:19]}Z');
     print(f'Have {len(bot.commands)} commands.');
     await bot.tree.sync();
     pass;
@@ -34,7 +34,7 @@ async def test(ctx:discord.ext.commands.Context, message: str):
 async def test(ctx:discord.ext.commands.Context, username: str):
     headers={'appName':'10HSBot','appVersion':version,'APIkey':inraToken,'isBeingDeveloped':True};
     dt = datetime.utcnow();
-    dtString = dt.isoformat();
+    dtString = dt.isoformat()[:19]+'Z';
     params={};
     y = requests.get('https://inara.cz/inapi/v1/', headers=headers);
     print(username);
