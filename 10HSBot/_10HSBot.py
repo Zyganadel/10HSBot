@@ -12,6 +12,9 @@ encoder = json.JSONEncoder();
 
 version = '4.0.4';
 
+allies = [5823,2373];
+roles = {'ally':-1,'recruit':-1,'guest':-1}
+
 dsToken = input('Input 10hs bot token');
 inraToken = input('Input inara token');
 
