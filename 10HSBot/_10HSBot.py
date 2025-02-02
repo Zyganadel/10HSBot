@@ -4,6 +4,8 @@ import discord.ext.commands
 import requests
 import json
 
+from InaraHelper import InaraHelper
+from InaraHelper import InaraData
 
 intents = discord.Intents.default();
 intents.message_content = True;
@@ -16,7 +18,7 @@ allies = [5823,2373];
 roles = {'ally':-1,'recruit':-1,'guest':-1}
 
 dsToken = input('Input 10hs bot token');
-inraToken = input('Input inara token');
+InaraHelper.inaraKey = input('Input inara token');
 
 client = discord.Client(intents=intents);
 bot = discord.ext.commands.Bot(command_prefix='h!', intents=intents);
