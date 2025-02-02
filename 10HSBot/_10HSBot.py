@@ -35,8 +35,8 @@ async def test(ctx:discord.ext.commands.Context, username: str):
     headers={'appName':'10HSBot','appVersion':version,'APIkey':inraToken,'isBeingDeveloped':True};
     dt = datetime.utcnow();
     dtString = dt.isoformat()[:19]+'Z';
-    params={};
-    y = requests.get('https://inara.cz/inapi/v1/', headers=headers);
+    params={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
+    y = requests.get('https://inara.cz/inapi/v1/', headers=headers, params=params);
     print(username);
     await ctx.send('This command is not implemented yet.');
     pass;
