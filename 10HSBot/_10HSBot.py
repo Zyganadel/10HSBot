@@ -35,17 +35,18 @@ async def test(ctx:discord.ext.commands.Context, message: str):
 
 @bot.hybrid_command(name='link', with_app_command=True)
 async def test(ctx:discord.ext.commands.Context, username: str):
-    headers={'header':{'appName':'10HSBot','appVersion':version,'APIkey':inraToken}};
+    headerData = {'appName':'10HSBot','appVersion':version,'APIkey':inraToken};
+    headerFormatted={'header':encoder.encode(headerData)};
     dt = datetime.utcnow();
     dtString = dt.isoformat()[:19]+'Z';
     data={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
-    jsonHeaders = encoder.encode(o=headers);
+    # jsonHeaders = encoder.encode(o=headerFormatted);
     jsonData = encoder.encode(o=data);
-    print(headers);
-    print(jsonHeaders);
+    print(headerFormatted);
+    # print(jsonHeaders);
     print(data);
     print(jsonData);
-    response = requests.post('https://inara.cz/inapi/v1/', headers=headers, data=jsonData);
+    response = requests.post('https://inara.cz/inapi/v1/', headers=headerFormatted, data=jsonData);
     reply = response.json();
     status = reply['header']['eventStatus'];
     statusText = reply['header']['eventStatusText'];
