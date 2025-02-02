@@ -23,6 +23,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="InaraHelper.py" />
     <Compile Include="_10HSBot.py" />
   </ItemGroup>
   <ItemGroup>
