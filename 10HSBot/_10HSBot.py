@@ -69,7 +69,7 @@ def IsCommanderRegistered(data:dict):
     except: pass;
     return False;
 
-def RecruitCommander(name:str):
+def SolveRoleIDForCMDR(name:str):
     data = InaraHelper.GetCMDRData(name);
     roleID:int;
     # if data invalid, make them a guest.
