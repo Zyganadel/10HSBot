@@ -25,7 +25,7 @@ class InaraHelper:
         response = InaraHelper.requests.post('https://inara.cz/inapi/v1/', data=jsonData);
         reply = response.json();
         status = reply['header']['eventStatus'];
-        pass;
+        return InaraData(reply);
 
     pass;
 
