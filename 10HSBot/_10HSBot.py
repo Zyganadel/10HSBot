@@ -1,3 +1,4 @@
+from datetime import datetime
 import discord
 import discord.ext.commands
 import requests
@@ -16,7 +17,8 @@ bot = discord.ext.commands.Bot(command_prefix='h!', intents=intents);
 
 @bot.event
 async def on_ready():
-    print(f'Logged in as {client.user}');
+    dt = datetime.utcnow();    
+    print(f'Logged in as {client.user} at {dt.isoformat()}');
     print(f'Have {len(bot.commands)} commands.');
     await bot.tree.sync();
     pass;
@@ -31,6 +33,8 @@ async def test(ctx:discord.ext.commands.Context, message: str):
 @bot.hybrid_command(name='link', with_app_command=True)
 async def test(ctx:discord.ext.commands.Context, username: str):
     headers={'appName':'10HSBot','appVersion':version,'APIkey':inraToken,'isBeingDeveloped':True};
+    dt = datetime.utcnow();
+    dtString = dt.isoformat();
     params={};
     y = requests.get('https://inara.cz/inapi/v1/', headers=headers);
     print(username);
