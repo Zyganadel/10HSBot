@@ -50,9 +50,6 @@ except OSError as e:
     authFile.close();
     pass;
 
-# dsToken = input('Input 10hs bot token');
-# InaraHelper.inaraKey = input('Input inara token');
-
 client = discord.Client(intents=intents);
 bot = discord.ext.commands.Bot(command_prefix='h!', intents=intents);
 
