@@ -89,6 +89,24 @@ async def link(ctx:Context, username: str):
     await executeLink(ctx.channel,user,username);
     pass;
 
+@bot.event
+async def on_member_join(member: discord.Member):
+    # Get data
+    roleID:int = SolveRoleIDForCMDR(member.display_name);
+
+    # Assign role
+    role=member.guild.get_role(roleID);
+    await member.add_roles(role, reason='Automated linking.');
+    await member.edit(nick=f'CMDR {member.display_name}');
+
+    # Send a welcome message.
+    channel = member.guild.get_channel(welcomeChannelID);
+    await channel.send(f'Salutations and welcome to the 10th <@{member.id}>. You were automatically given the {role.name} role based on your affiliation on Inara (if any). '+
+    f'If this is incorrect, please run the /link command with your Inara username. If you do not have an Inara account, let one of our officers know and we\'ll assign roles manually.'+
+    f'\n\nWe would ask that you give the rules in <#401082935379361802> a read, and if you have any questions or concerns, please direct them to an officer.'+
+    f'\n\nIn addition, if you have questions about AX, Mining or Exobio, feel free to reach out to our specialists.');
+    pass;
+
 async def executeLink(channel:channel, user:Member, name:str):
     # Get data
     try:
@@ -104,17 +122,6 @@ async def executeLink(channel:channel, user:Member, name:str):
         await user.edit(nick=f'CMDR {name}');
         await channel.send(f'CMDR {name}, something broke. it\'s most likely that we just don\'t have a guest role and our system thinks you are supposed to be a guest.');
         pass;
-    pass;
-
-@bot.event
-async def on_member_join(member: discord.Member):
-    # Get data
-    roleID:int = SolveRoleIDForCMDR(member.display_name);
-    
-    # Assign role
-    role=member.guild.get_role(roleID);
-    await member.add_roles(role, reason='Automated linking.');
-    await member.edit(nick=f'CMDR {member.display_name}');
     pass;
 
 def SolveRoleIDForCMDR(name:str):
