@@ -39,12 +39,14 @@ class InaraData:
     def __init__(self, rawData:dict):
         # we'll only be dealing with the event, so disregard the header.
         eventInfo=rawData['events'][0];
-        eventData:dict = eventInfo['eventData'];
-        self.allData=eventData;
 
         # Determine if data is valid by checking status code, and if not, set all values to indicate invalid.
         status:int = eventInfo['eventStatus'];
         self.isValid = status == 200;
+
+        eventData:dict = {};        
+        if(self.isValid): eventData = eventInfo['eventData'];
+        self.allData=eventData;
 
         # if data is invalid, perform error handling.
         if(not self.isValid):
