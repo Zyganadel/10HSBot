@@ -31,6 +31,8 @@ try:
     # Read data
     dsToken = authFile.readline();
     InaraHelper.inaraKey = authFile.readline();
+    authFile.close();
+    print("In theory, our tokens should have loaded.");
 except OSError as e:
     # Ensure file and dir exist.
     mkdir("data");
@@ -41,8 +43,9 @@ except OSError as e:
     InaraHelper.inaraKey = input('Input inara token');
 
     # Format and write data to file.
-    data = [dsToken,InaraHelper.inaraKey];
+    data = [dsToken,'\n'+InaraHelper.inaraKey];
     authFile.writelines(data);
+    authFile.close();
     pass;
 
 # dsToken = input('Input 10hs bot token');
