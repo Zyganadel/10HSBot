@@ -20,6 +20,7 @@ version = '4.0.4';
 
 allies = [5823,2373];
 roles = {'ally':758089412515987496,'recruit':401075831885004802,'guest':0}
+welcomeChannelID = 465952730880671764;
 
 # Define the bot token so we can access it later. inara key is pre-defined and static so we can use as is.
 dsToken:str;
@@ -71,30 +72,21 @@ async def test(ctx:Context, message: str):
 
 @bot.hybrid_command(name='link', with_app_command=True)
 async def test(ctx:Context, username: str):
-    # header = {'appName':'EDDI','appVersion':version,'APIkey':inraToken};
-    # dt = datetime.utcnow();
-    # dtString = dt.isoformat()[:19]+'Z';
-    # data={'eventName':'getCommanderProfile','eventTimestamp':dtString,'eventData':{'searchName':username}};
-    # dataFormatted={'header':header,'events':[data]};
-    # jsonData = encoder.encode(o=dataFormatted);
-    # print(dataFormatted);
-    # print(data);
-    # print(jsonData);
-    # response = requests.post('https://inara.cz/inapi/v1/', data=jsonData);
-    # reply = response.json();
-    # status = reply['header']['eventStatus'];
-    # print(IsCommanderRegistered(reply));
-    # await ctx.send(reply);
-
     # Get data
-    roleID:int = SolveRoleIDForCMDR(username);
-    user:discord.Member = ctx.author;
+    try:
+        roleID:int = SolveRoleIDForCMDR(username);
+        user:discord.Member = ctx.author;
     
-    # Assign role
-    role=ctx.guild.get_role(roleID);
-    await user.add_roles(role, reason='User initiated linking.');
-    await user.edit(nick=f'CMDR {username}');
-    await ctx.send(f'CMDR {username}, your role was updated to {role.name}.');
+        # Assign role
+        role=ctx.guild.get_role(roleID);
+        await user.add_roles(role, reason='User initiated linking.');
+        await user.edit(nick=f'CMDR {username}');
+        await ctx.send(f'CMDR {username}, your role was updated to {role.name}.');
+        pass;
+    except BaseException as e:
+        await user.edit(nick=f'CMDR {username}');
+        await ctx.send(f'CMDR {username}, something broke. it\'s most likely that we just don\'t have a guest role and our system thinks you are supposed to be a guest.');
+        pass;
     pass;
 
 @bot.event
