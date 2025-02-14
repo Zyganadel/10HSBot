@@ -1,4 +1,5 @@
 from datetime import datetime
+from os import mkdir
 import discord
 import discord.ext.commands
 from discord.ext.commands import Context
@@ -20,8 +21,35 @@ version = '4.0.4';
 allies = [5823,2373];
 roles = {'ally':758089412515987496,'recruit':401075831885004802,'guest':0}
 
-dsToken = input('Input 10hs bot token');
-InaraHelper.inaraKey = input('Input inara token');
+# Define the bot token so we can access it later. inara key is pre-defined and static so we can use as is.
+dsToken:str;
+
+# If the tokens file exists and is readable, read the token from file because its annoying to keep typing it in.
+try:
+    authFile = open("data\\auth.txt");
+
+    # Read data
+    dsToken = authFile.readline();
+    InaraHelper.inaraKey = authFile.readline();
+    authFile.close();
+    print("In theory, our tokens should have loaded.");
+except OSError as e:
+    # Ensure file and dir exist.
+    mkdir("data");
+    authFile = open("data\\auth.txt", "wt");
+
+    # Get data from user.
+    dsToken = input('Input 10hs bot token');
+    InaraHelper.inaraKey = input('Input inara token');
+
+    # Format and write data to file.
+    data = [dsToken,'\n'+InaraHelper.inaraKey];
+    authFile.writelines(data);
+    authFile.close();
+    pass;
+
+# dsToken = input('Input 10hs bot token');
+# InaraHelper.inaraKey = input('Input inara token');
 
 client = discord.Client(intents=intents);
 bot = discord.ext.commands.Bot(command_prefix='h!', intents=intents);
