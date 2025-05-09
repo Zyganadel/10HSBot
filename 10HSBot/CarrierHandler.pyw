@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timezone
 import time
 import discord;
@@ -8,6 +9,8 @@ from discord.ext.commands import Bot, Context;
 class CarrierHandler:
 
     bot:Bot;
+
+    jumpOffset=300;
 
     def __init__(self, bot:Bot):
         self.bot=bot;
@@ -25,21 +28,21 @@ class CarrierHandler:
             pass
 
         @self.tree.command(name='scheduledebug', description='should display a timestamp in unix, and the current time.')
-        async def TreeSchedule(ctx:Interaction):
-            await ctx.response.send_message(self.GetTimestampString());
+        async def TreeSchedule(ctx:Interaction, Destination_System:str, Departure_System:str='Umbila', hours:int=0, minutes:int=0):
+            departureOffset = minutes*60+hours*3600;
+            response = f'''
+            Carrier {ctx.channel.name} is scheduling a jump.
+
+            Trip Details:
+            - Departure System: `{Departure_System}`
+            - Destination System: `{Destination_System}`
+            - Departure Time: <t:{int(time.time())+departureOffset}:F>
+            '''
+            await ctx.response.send_message(response);
+            await asyncio.sleep(departureOffset);
+            await ctx.followup.send(f'{ctx.user.mention} Chewie get us outta here!!!');
             pass
 
         pass
 
-    def GetTimestampString(self) -> str:
-        dt = datetime.now(timezone.utc);
-        
-        ts=dt.timestamp();
-        return f'Scheduling not implemented. Timestamp is {int(ts)} which might be <t:{int(ts)}:f>';
-    
-
     pass
-
-
-
-
