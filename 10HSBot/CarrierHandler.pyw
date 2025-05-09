@@ -27,7 +27,7 @@ class CarrierHandler:
             await ctx.send(self.GetTimestampString());
             pass
 
-        @self.tree.command(name='Schedule Jump', description='Announces a jump, and pings you when you should select the system in game.')
+        @self.tree.command(name='scheduledebug', description='do not use yet')
         async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='Umbila', hours:int=0, minutes:int=0):
             departureOffset = minutes*60+hours*3600;
             response = f'''
