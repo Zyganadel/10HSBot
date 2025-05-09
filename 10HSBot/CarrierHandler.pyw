@@ -27,7 +27,7 @@ class CarrierHandler:
             await ctx.send(self.GetTimestampString());
             pass
 
-        @self.tree.command(name='scheduledebug', description='should display a timestamp in unix, and the current time.')
+        @self.tree.command(name='scheduledebug', description='do not use yet')
         async def TreeSchedule(ctx:Interaction, Destination_System:str, Departure_System:str='Umbila', hours:int=0, minutes:int=0):
             departureOffset = minutes*60+hours*3600;
             response = f'''
