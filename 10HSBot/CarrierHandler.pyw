@@ -28,15 +28,16 @@ class CarrierHandler:
             pass
 
         @self.tree.command(name='scheduledebug', description='do not use yet')
-        async def TreeSchedule(ctx:Interaction, Destination_System:str, Departure_System:str='Umbila', hours:int=0, minutes:int=0):
+        async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='Umbila', hours:int=0, minutes:int=0):
             departureOffset = minutes*60+hours*3600;
             response = f'''
-            Carrier {ctx.channel.name} is scheduling a jump.
+### :warning: **Attention** :warning:
+Carrier {ctx.channel.name} has scheduled a jump.
 
-            Trip Details:
-            - Departure System: `{Departure_System}`
-            - Destination System: `{Destination_System}`
-            - Departure Time: <t:{int(time.time())+departureOffset}:F>
+### Trip Details:
+- Departure System: `{departure_system}`
+- Destination System: `{destination_system}`
+- Scheduled Departure Time: <t:{int(time.time())+departureOffset}:F>
             '''
             await ctx.response.send_message(response);
             await asyncio.sleep(departureOffset);
