@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import time
 import discord;
 import discord.ext.commands;
@@ -32,9 +32,10 @@ class CarrierHandler:
         pass
 
     def GetTimestampString(self) -> str:
-        dt = datetime.utcnow();
+        dt = datetime.now(timezone.utc);
+        
         ts=dt.timestamp();
-        return f'Scheduling not implemented. Timestamp is {ts}, which might be <t:{ts}:f>';
+        return f'Scheduling not implemented. Timestamp is {int(ts)} which might be <t:{int(ts)}:f>';
     
 
     pass
