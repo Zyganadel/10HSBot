@@ -6,6 +6,8 @@ import discord.ext.commands;
 from discord import Guild, Interaction, Member, TextChannel, app_commands;
 from discord.ext.commands import Bot, Context;
 
+indexFileName:str='data\\carrierIndex.txt';
+
 class CarrierHandler:
 
     bot:Bot;
@@ -18,7 +20,11 @@ class CarrierHandler:
         self.bot=bot;
         self.tree=bot.tree;
         self.CreateCmds(self.bot,self.tree);
-        pass
+
+        guild=bot.get_guild(200305786637778945);
+
+        self.carriers = load(guild,indexFileName);
+        pass;
 
     tree:app_commands.CommandTree;
 
@@ -37,7 +43,7 @@ class CarrierHandler:
             await ctx.send(f'<t:{int(time.time())}:F>');
             # check authorisation.
             await ctx.send(f'Auth check: {self.RoleAuthCheck(ctx.author)}');
-            pass
+            pass;
 
         @self.tree.command(name='schedule-jump', description='possibly unstable')
         async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='Umbila', hours:int=0, minutes:int=0):
@@ -54,7 +60,7 @@ Carrier {ctx.channel.name} has scheduled a jump.
             await ctx.response.send_message(response);
             await asyncio.sleep(departureOffset);
             await ctx.followup.send(f'{ctx.user.mention} You should schedule the jump now.');
-            pass
+            pass;
 
         @self.tree.command(name='register-existing', description='Registers a carrier to an existing channel.')
         async def TreeRegisterExisting(ctx:Interaction, name:str, owner:str, carrierid:str='aaaaaa'):
@@ -71,17 +77,17 @@ Carrier {ctx.channel.name} has scheduled a jump.
 
             # create carrier
             self.carriers.append(Carrier(ctx.guild,ctx.channel_id,owner,name,carrierid));
-            save('data\\carrierIndex.txt', self.carriers);
+            save(indexFileName, self.carriers);
 
             # after its saved, inform the user.
             message = f'Registered carrier {name} ({carrierid}) for <@{owner}> in this channel.';
             await ctx.response.send_message(message);
 
-            pass
+            pass;
 
-        pass
+        pass;
 
-    pass
+    pass;
 
 class Carrier:
 
@@ -99,12 +105,60 @@ class Carrier:
         self.name=name;
         self.carrierid=carrierid;
 
-        pass
+        pass;
 
-    pass
+    pass;
+
+def loadIndividual(guild:Guild, file:str)->Carrier:
+    try:
+        f=open(file);
+        # each arg should be on a separate line.
+        carrier=Carrier(guild,int(f.readline()),int(f.readline),f.readline(),f.readline());
+        carrier.system=f.readline();
+        f.close();
+        return carrier; 
+    except:
+        # if something goes wrong, return -1 as an error code.
+        return -1;
+    pass;
+
+def saveIndividual(file:str, carrier:Carrier):
+    # ensure the file exists.
+    try:
+        f=open(file,'wt');
+        c=carrier; # shorten it because we'll spam it.
+        lines=[c.channel.id,c.owner.id,c.name,c.carrierid,c.system];
+        f.writelines(lines);
+        f.close();
+        return 0;
+    except:
+        return -1;
+    pass;
+
 
 def load(guild:Guild, file:str)->list:
-    raise BaseException();
+    carriers=[];
+    try:
+        f=open(file);
+        files = f.readlines();
+        for x in files:
+            carriers.append(loadIndividual(guild,x));
+            continue;
+        f.close();        
+    except:
+        pass;
+    return carriers;
 
 def save(file:str, carriers:list):
-    raise BaseException();
+    lines=[];
+    for x in carriers:
+        # cast so we can access things easier.
+        c:Carrier=x;
+        fname=f'data\\{c.carrierid}.cdat';
+        saveIndividual(fname,c);
+        lines.append(fname);
+        continue;
+    f=open(file,'wt');
+    f.writelines(lines);
+    f.close();
+    pass;
