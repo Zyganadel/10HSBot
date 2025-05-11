@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 import time
 import discord;
 import discord.ext.commands;
-from discord import Interaction, app_commands;
+from discord import Interaction, Member, app_commands;
 from discord.ext.commands import Bot, Context;
 
 class CarrierHandler:
@@ -19,6 +19,12 @@ class CarrierHandler:
         pass
 
     tree:app_commands.CommandTree;
+
+    # check if a user is permitted to use an elevated command. Only 1st LT. Cmdr. and above should be using carrier system without permission.
+    def RoleAuthCheck(user:Member)->bool:
+        fltc_role = user.guild.get_role(1370501242597675099);
+        alpha_role = user.guild.get_role(769795073030094888);
+        return fltc_role in user.roles or alpha_role in user.roles;
 
     # Region for commands.
     def CreateCmds(self, bot, tree):
