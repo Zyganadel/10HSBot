@@ -125,9 +125,9 @@ def loadIndividual(guild:Guild, file:str)->Carrier:
 def saveIndividual(file:str, carrier:Carrier):
     # ensure the file exists.
     try:
-        f=open(file,'wt');
         c=carrier; # shorten it because we'll spam it.
         lines=[c.channel.id,c.owner.id,c.name,c.carrierid,c.system];
+        f=open(file,'wt');
         f.writelines(lines);
         f.close();
         return 0;
