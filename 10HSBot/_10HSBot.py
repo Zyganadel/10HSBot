@@ -8,6 +8,7 @@ from discord.abc import Snowflake
 import requests
 import json
 
+from CarrierHandler import CarrierHandler
 from InaraHelper import InaraHelper
 from InaraHelper import InaraData
 
@@ -52,6 +53,7 @@ except OSError as e:
 
 client = discord.Client(intents=intents);
 bot = discord.ext.commands.Bot(command_prefix='h!', intents=intents);
+ch = CarrierHandler(bot);
 
 tree:app_commands.CommandTree = bot.tree;
 
