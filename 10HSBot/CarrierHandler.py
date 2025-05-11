@@ -102,7 +102,7 @@ class Carrier:
 
     def __init__(self, guild:Guild, cid:int, oid:int, name:str, carrierid:str):
         self.channel=guild.get_channel(cid);
-        self.oid=guild.get_member(oid);
+        self.owner=guild.get_member(oid);
         self.name=name;
         self.carrierid=carrierid;
 
@@ -127,7 +127,7 @@ def saveIndividual(file:str, carrier:Carrier):
     # ensure the file exists.
     try:
         c=carrier; # shorten it because we'll spam it.
-        lines=[c.channel.id,c.owner.id,c.name,c.carrierid,c.system];
+        lines=[f'{c.channel.id}\n',f'{c.owner.id}\n',c.name+'\n',c.carrierid+'\n',c.system+'\n'];
         f=open(file,'wt');
         f.writelines(lines);
         f.close();
@@ -139,7 +139,7 @@ def saveIndividual(file:str, carrier:Carrier):
 
 
 def load(guild:Guild, file:str)->list:
-    carriers=[];
+    carriers=list();
     try:
         f=open(file);
         files = f.readlines();
@@ -156,6 +156,7 @@ def save(file:str, carriers:list):
     lines=[];
     for x in carriers:
         # cast so we can access things easier.
+        if(type(x)!=Carrier): continue;
         c:Carrier=x;
         fname=f'data\\{c.carrierid}.cdat';
         saveIndividual(fname,c);
