@@ -1,6 +1,7 @@
 import asyncio
 from datetime import datetime, timezone
 import time
+from unittest.mock import Base
 import discord;
 import discord.ext.commands;
 from discord import Guild, Interaction, Member, TextChannel, app_commands;
@@ -117,9 +118,9 @@ def loadIndividual(guild:Guild, file:str)->Carrier:
         carrier.system=f.readline();
         f.close();
         return carrier; 
-    except:
-        # if something goes wrong, return -1 as an error code.
-        return -1;
+    except BaseException as e:
+        print(f'Error: {e}.');
+        pass;
     pass;
 
 def saveIndividual(file:str, carrier:Carrier):
@@ -131,7 +132,8 @@ def saveIndividual(file:str, carrier:Carrier):
         f.writelines(lines);
         f.close();
         return 0;
-    except:
+    except BaseException as e:
+        print(f'Error: {e}.');
         return -1;
     pass;
 
@@ -145,7 +147,8 @@ def load(guild:Guild, file:str)->list:
             carriers.append(loadIndividual(guild,x));
             continue;
         f.close();        
-    except:
+    except BaseException as e:
+        print(f'Error: {e}.');
         pass;
     return carriers;
 
