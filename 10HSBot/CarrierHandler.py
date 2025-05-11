@@ -12,6 +12,7 @@ indexFileName:str='data\\carrierIndex.txt';
 class CarrierHandler:
 
     bot:Bot;
+    tree:app_commands.CommandTree;
 
     jumpOffset=1200;
 
@@ -21,13 +22,13 @@ class CarrierHandler:
         self.bot=bot;
         self.tree=bot.tree;
         self.CreateCmds(self.bot,self.tree);
+        pass;
 
-        guild=bot.get_guild(200305786637778945);
-
+    def PostInit(self):
+        guild=self.bot.get_guild(200305786637778945);
         self.carriers = load(guild,indexFileName);
         pass;
 
-    tree:app_commands.CommandTree;
 
     # check if a user is permitted to use an elevated command. Only 1st LT. Cmdr. and above should be using carrier system without permission.
     def RoleAuthCheck(self, user:Member)->bool:
@@ -116,7 +117,9 @@ def loadIndividual(guild:Guild, file:str)->Carrier:
     try:
         f=open(file);
         # each arg should be on a separate line.
-        carrier=Carrier(guild,int(f.readline()),int(f.readline),f.readline(),f.readline());
+        cid=f.readline();
+        oid=f.readline();
+        carrier=Carrier(guild,int(cid),int(oid),f.readline(),f.readline());
         carrier.system=f.readline();
         f.close();
         return carrier; 
