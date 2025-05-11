@@ -75,3 +75,9 @@ class Carrier:
         pass
 
     pass
+
+def load(guild:Guild, file:str)->list:
+    raise BaseException();
+
+def save(file:str, carriers:list):
+    raise BaseException();
