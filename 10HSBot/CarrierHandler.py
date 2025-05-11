@@ -28,9 +28,13 @@ class CarrierHandler:
 
     # Region for commands.
     def CreateCmds(self, bot, tree):
-        @self.bot.command(name='timedebug')
+        # a debug command to test things.
+        @self.bot.command(name='staticdebug')
         async def Schedule(ctx:Context):
+            # check that time is working.
             await ctx.send(f'<t:{int(time.time())}:F>');
+            # check authorisation.
+            await ctx.send(f'Auth check: {self.RoleAuthCheck(ctx.author)}');
             pass
 
         @self.tree.command(name='schedule-jump', description='possibly unstable')
