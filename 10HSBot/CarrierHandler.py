@@ -54,6 +54,24 @@ Carrier {ctx.channel.name} has scheduled a jump.
             await ctx.followup.send(f'{ctx.user.mention} You should schedule the jump now.');
             pass
 
+    pass
+
+class Carrier:
+
+    channel:TextChannel
+    owner:Member
+    name:str
+    carrierid:str
+
+    # our home system is mitnahas, so assume a carrier with no home location is in that system.
+    system:str = 'Mitnahas';
+
+    def __init__(self, guild:Guild, cid:int, oid:int, name:str, carrierid:str):
+        self.channel=guild.get_channel(cid);
+        self.oid=guild.get_member(oid);
+        self.name=name;
+        self.carrierid=carrierid;
+
         pass
 
     pass
