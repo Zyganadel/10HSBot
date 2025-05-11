@@ -3,14 +3,16 @@ from datetime import datetime, timezone
 import time
 import discord;
 import discord.ext.commands;
-from discord import Interaction, Member, app_commands;
+from discord import Guild, Interaction, Member, TextChannel, app_commands;
 from discord.ext.commands import Bot, Context;
 
 class CarrierHandler:
 
     bot:Bot;
 
-    jumpOffset=300;
+    jumpOffset=1200;
+
+    carriers=[];
 
     def __init__(self, bot:Bot):
         self.bot=bot;
@@ -21,7 +23,7 @@ class CarrierHandler:
     tree:app_commands.CommandTree;
 
     # check if a user is permitted to use an elevated command. Only 1st LT. Cmdr. and above should be using carrier system without permission.
-    def RoleAuthCheck(user:Member)->bool:
+    def RoleAuthCheck(self, user:Member)->bool:
         fltc_role = user.guild.get_role(1370501242597675099);
         alpha_role = user.guild.get_role(769795073030094888);
         return fltc_role in user.roles or alpha_role in user.roles;
@@ -53,6 +55,25 @@ Carrier {ctx.channel.name} has scheduled a jump.
             await asyncio.sleep(departureOffset);
             await ctx.followup.send(f'{ctx.user.mention} You should schedule the jump now.');
             pass
+
+        @self.tree.command(name='register-existing', description='Registers a carrier to an existing channel.')
+        async def TreeRegisterExisting(ctx:Interaction, name:str, owner:int, carrierid:str='aaaaaa'):
+            # check authorisation.
+            if(not self.RoleAuthCheck(ctx.user)):
+                ctx.response.send_message(ephemeral=True, content='Either something went wrong or you are not authorised to use this.');
+                return;
+
+            # create carrier
+            self.carriers.append(Carrier(ctx.guild,ctx.channel_id,owner,name,carrierid));
+            save('data\\carrierIndex.txt', self.carriers);
+
+            # after its saved, inform the user.
+            message = f'Registered carrier {name} ({carrierid}) for <@{owner}> in this channel.';
+            ctx.response.send_message(message);
+
+            pass
+
+        pass
 
     pass
 
