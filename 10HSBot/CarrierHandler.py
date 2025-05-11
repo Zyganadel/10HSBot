@@ -57,10 +57,16 @@ Carrier {ctx.channel.name} has scheduled a jump.
             pass
 
         @self.tree.command(name='register-existing', description='Registers a carrier to an existing channel.')
-        async def TreeRegisterExisting(ctx:Interaction, name:str, owner:int, carrierid:str='aaaaaa'):
+        async def TreeRegisterExisting(ctx:Interaction, name:str, owner:str, carrierid:str='aaaaaa'):
             # check authorisation.
             if(not self.RoleAuthCheck(ctx.user)):
-                ctx.response.send_message(ephemeral=True, content='Either something went wrong or you are not authorised to use this.');
+                await ctx.response.send_message(ephemeral=True, content='Either something went wrong or you are not authorised to use this.');
+                return;
+            # check if owner is a valid id.
+            try:
+                owner=int(owner);
+            except:
+                await ctx.response.send_message(ephemeral=True,content='Owner was not an int.');
                 return;
 
             # create carrier
@@ -69,7 +75,7 @@ Carrier {ctx.channel.name} has scheduled a jump.
 
             # after its saved, inform the user.
             message = f'Registered carrier {name} ({carrierid}) for <@{owner}> in this channel.';
-            ctx.response.send_message(message);
+            await ctx.response.send_message(message);
 
             pass
 
