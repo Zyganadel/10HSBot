@@ -22,9 +22,9 @@ class CarrierHandler:
 
     # Region for commands.
     def CreateCmds(self, bot, tree):
-        @self.bot.command(name='schedule')
-        async def Schedule(self, ctx:Context, system:str):
-            await ctx.send(self.GetTimestampString());
+        @self.bot.command(name='timedebug')
+        async def Schedule(ctx:Context):
+            await ctx.send(f'<t:{int(time.time())}:F>');
             pass
 
         @self.tree.command(name='scheduledebug', description='do not use yet')
@@ -41,7 +41,7 @@ Carrier {ctx.channel.name} has scheduled a jump.
             '''
             await ctx.response.send_message(response);
             await asyncio.sleep(departureOffset);
-            await ctx.followup.send(f'{ctx.user.mention} Chewie get us outta here!!!');
+            await ctx.followup.send(f'{ctx.user.mention} You should schedule the jump now.');
             pass
 
         pass
