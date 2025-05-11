@@ -27,7 +27,7 @@ class CarrierHandler:
             await ctx.send(f'<t:{int(time.time())}:F>');
             pass
 
-        @self.tree.command(name='scheduledebug', description='do not use yet')
+        @self.tree.command(name='schedule-jump', description='possibly unstable')
         async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='Umbila', hours:int=0, minutes:int=0):
             departureOffset = minutes*60+hours*3600;
             response = f'''
