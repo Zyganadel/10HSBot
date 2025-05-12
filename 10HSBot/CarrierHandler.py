@@ -120,8 +120,8 @@ Carrier {ctx.channel.name} has scheduled a jump.
 
             # after its saved, inform the user.
             message:str
-            if(ping):message = f'Registered carrier {name} ({carrierid}) for <@{owner}> in this channel.';
-            else:message = f'Registered carrier {name} ({carrierid}) for {ctx.guild.get_member(owner).nick} in this channel.';
+            if(ping):message = f'Registered carrier `{name}` `({carrierid})` for <@{owner}> in this channel.';
+            else:message = f'Registered carrier `{name}` `({carrierid})` for `{ctx.guild.get_member(owner).nick}` in this channel.';
             await ctx.response.send_message(message);
 
             # save destinations.
