@@ -124,6 +124,8 @@ Carrier {ctx.channel.name} has scheduled a jump.
             else:message = f'Registered carrier {name} ({carrierid}) for {ctx.guild.get_member(owner).nick} in this channel.';
             await ctx.response.send_message(message);
 
+            # save destinations.
+            save(indexFileName,self.carriers);
             pass;
 
         pass;
