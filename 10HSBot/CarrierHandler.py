@@ -36,6 +36,35 @@ class CarrierHandler:
         alpha_role = user.guild.get_role(769795073030094888);
         return fltc_role in user.roles or alpha_role in user.roles;
 
+    def OwnerOrRoleAuthCheck(self, user:Member, channel:TextChannel)->int:
+        # return all clear if user is an admin.
+        if(self.RoleAuthCheck(user)): return 0;
+
+        # otherwise, check if the user is the owner of the channel.
+        for carrier in self.carriers:
+            # cast so we can access things easier.
+            if(type(carrier)!=Carrier): continue;
+            c:Carrier=carrier;
+
+            if(c.owner==user):
+                # if the channels and owners match, return all clear.
+                if(c.channel==channel): return 0;
+                # otherwise, return not your channel.
+                else: return -1;
+            pass;
+        # if the user has no carrier, let them know.
+        return -2;
+
+    def GetCarrier(self, channel:TextChannel):
+        for carrier in self.carriers:
+            # cast so we can access things easier.
+            if(type(carrier)!=Carrier): continue;
+            c:Carrier=carrier;
+
+            if(c.channel==channel): return c;
+            continue;
+        pass;
+
     # Region for commands.
     def CreateCmds(self, bot, tree):
         # a debug command to test things.
@@ -48,7 +77,15 @@ class CarrierHandler:
             pass;
 
         @self.tree.command(name='schedule-jump', description='possibly unstable')
-        async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='Umbila', hours:int=0, minutes:int=0):
+        async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='', hours:int=0, minutes:int=0):
+            authResponse=self.OwnerOrRoleAuthCheck(user=ctx.user,channel=ctx.channel);
+            if(authResponse==-1): await ctx.response.send_message(ephemeral=True, content='This is not your carrier channel.');
+            elif(authResponse==-2): await ctx.response.send_message(ephemeral=True, content='This is not your channel. Maybe get one first.');
+
+            carrier:Carrier=self.GetCarrier(ctx.channel);
+            if(departure_system=='' and carrier != None): departure_system=carrier.current_system;
+            carrier.target_system=destination_system;
+
             departureOffset = minutes*60+hours*3600;
             response = f'''
 ### :warning: **Attention** :warning:
@@ -83,10 +120,12 @@ Carrier {ctx.channel.name} has scheduled a jump.
 
             # after its saved, inform the user.
             message:str
-            if(ping):message = f'Registered carrier {name} ({carrierid}) for <@{owner}> in this channel.';
-            else:message = f'Registered carrier {name} ({carrierid}) for {ctx.guild.get_member(owner).nick} in this channel.';
+            if(ping):message = f'Registered carrier `{name}` `({carrierid})` for <@{owner}> in this channel.';
+            else:message = f'Registered carrier `{name}` `({carrierid})` for `{ctx.guild.get_member(owner).display_name}` in this channel.';
             await ctx.response.send_message(message);
 
+            # save destinations.
+            save(indexFileName,self.carriers);
             pass;
 
         pass;
@@ -101,7 +140,9 @@ class Carrier:
     carrierid:str
 
     # our home system is mitnahas, so assume a carrier with no home location is in that system.
-    system:str = 'Mitnahas';
+    current_system:str = 'Mitnahas';
+    # set a default value so if someone reports a jump, it wont break.
+    target_system:str=''; 
 
     def __init__(self, guild:Guild, cid:int, oid:int, name:str, carrierid:str):
         self.channel=guild.get_channel(cid);
@@ -118,10 +159,10 @@ def loadIndividual(guild:Guild, file:str)->Carrier:
         
         f=open(file);
         # each arg should be on a separate line.
-        cid=f.readline();
-        oid=f.readline();
-        carrier=Carrier(guild,int(cid),int(oid),f.readline(),f.readline());
-        carrier.system=f.readline();
+        cid=trimstring(f.readline());
+        oid=trimstring(f.readline());
+        carrier=Carrier(guild,int(cid),int(oid),trimstring(f.readline()),trimstring(f.readline()));
+        carrier.current_system=trimstring(f.readline());
         f.close();
         return carrier; 
     except BaseException as e:
@@ -133,7 +174,7 @@ def saveIndividual(file:str, carrier:Carrier):
     # ensure the file exists.
     try:
         c=carrier; # shorten it because we'll spam it.
-        lines=[f'{c.channel.id}\n',f'{c.owner.id}\n',c.name+'\n',c.carrierid+'\n',c.system+'\n'];
+        lines=[f'{c.channel.id}\n',f'{c.owner.id}\n',c.name+'\n',c.carrierid+'\n',c.current_system+'\n'];
         f=open(file,'wt');
         f.writelines(lines);
         f.close();
@@ -151,7 +192,7 @@ def load(guild:Guild, file:str)->list:
         files = f.readlines();
         for x in files:
             # Remove escape char.
-            x=x[:len(x)-1];
+            x=trimstring(x);
             carriers.append(loadIndividual(guild,f'data\\{x}.cdat'));
             continue;
         f.close();        
@@ -175,3 +216,6 @@ def save(file:str, carriers:list):
     f.writelines(lines);
     f.close();
     pass;
+
+def trimstring(s:str,trimLength:int=-1)->str:
+    return s[:len(s)+trimLength];
