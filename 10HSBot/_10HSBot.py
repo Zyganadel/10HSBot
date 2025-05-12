@@ -64,7 +64,7 @@ async def on_ready():
     await bot.tree.sync();
     print(f'Have {len(bot.commands)} commands.');
     ch.PostInit();
-    print(f'Initialized carrier system.');
+    print(f'Initialized carrier system, we have {len(ch.carriers)} carriers.');
     pass;
 
 @tree.command(name='test',description='test command')
