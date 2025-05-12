@@ -61,8 +61,10 @@ tree:app_commands.CommandTree = bot.tree;
 async def on_ready():
     dt = datetime.utcnow();    
     print(f'Logged in as {client.user} at {dt.isoformat()[:19]}Z');
-    print(f'Have {len(bot.commands)} commands.');
     await bot.tree.sync();
+    print(f'Have {len(bot.commands)} commands.');
+    ch.PostInit();
+    print(f'Initialized carrier system, we have {len(ch.carriers)} carriers.');
     pass;
 
 @tree.command(name='test',description='test command')
@@ -140,4 +142,4 @@ def SolveRoleIDForCMDR(name:str):
     return roleID;
 
 bot.run(dsToken);
-bot.tree.sync();
+# bot.tree.sync();
