@@ -36,6 +36,24 @@ class CarrierHandler:
         alpha_role = user.guild.get_role(769795073030094888);
         return fltc_role in user.roles or alpha_role in user.roles;
 
+    def OwnerOrRoleAuthCheck(self, user:Member, channel:TextChannel)->int:
+        # return all clear if user is an admin.
+        if(self.RoleAuthCheck(user)): return 0;
+
+        # otherwise, check if the user is the owner of the channel.
+        for carrier in self.carriers:
+            # cast so we can access things easier.
+            if(type(carrier)!=Carrier): continue;
+            c:Carrier=carrier;
+
+            if(c.owner==user):
+                # if the channels and owners match, return all clear.
+                if(c.channel==channel): return 0;
+                # otherwise, return not your channel.
+                else: return -1;
+            pass;
+        # if the user has no carrier, let them know.
+        return -2;
     # Region for commands.
     def CreateCmds(self, bot, tree):
         # a debug command to test things.
@@ -48,7 +66,13 @@ class CarrierHandler:
             pass;
 
         @self.tree.command(name='schedule-jump', description='possibly unstable')
-        async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='Umbila', hours:int=0, minutes:int=0):
+        async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='', hours:int=0, minutes:int=0):
+
+
+            authResponse=self.OwnerOrRoleAuthCheck();
+            if(authResponse==-1): await ctx.response.send_message(ephemeral=true, content='This is not your carrier channel.');
+            elif(authResponse==-2): await ctx.response.send_message(ephemeral=true, content='This is not your channel. Maybe get one first.');
+
             departureOffset = minutes*60+hours*3600;
             response = f'''
 ### :warning: **Attention** :warning:
