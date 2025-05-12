@@ -126,7 +126,9 @@ class Carrier:
     carrierid:str
 
     # our home system is mitnahas, so assume a carrier with no home location is in that system.
-    system:str = 'Mitnahas';
+    current_system:str = 'Mitnahas';
+    # set a default value so if someone reports a jump, it wont break.
+    target_system:str=''; 
 
     def __init__(self, guild:Guild, cid:int, oid:int, name:str, carrierid:str):
         self.channel=guild.get_channel(cid);
@@ -146,7 +148,7 @@ def loadIndividual(guild:Guild, file:str)->Carrier:
         cid=f.readline();
         oid=f.readline();
         carrier=Carrier(guild,int(cid),int(oid),f.readline(),f.readline());
-        carrier.system=f.readline();
+        carrier.current_system=f.readline();
         f.close();
         return carrier; 
     except BaseException as e:
@@ -158,7 +160,7 @@ def saveIndividual(file:str, carrier:Carrier):
     # ensure the file exists.
     try:
         c=carrier; # shorten it because we'll spam it.
-        lines=[f'{c.channel.id}\n',f'{c.owner.id}\n',c.name+'\n',c.carrierid+'\n',c.system+'\n'];
+        lines=[f'{c.channel.id}\n',f'{c.owner.id}\n',c.name+'\n',c.carrierid+'\n',c.current_system+'\n'];
         f=open(file,'wt');
         f.writelines(lines);
         f.close();
