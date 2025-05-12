@@ -67,11 +67,12 @@ class CarrierHandler:
 
         @self.tree.command(name='schedule-jump', description='possibly unstable')
         async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='', hours:int=0, minutes:int=0):
-
-
             authResponse=self.OwnerOrRoleAuthCheck();
-            if(authResponse==-1): await ctx.response.send_message(ephemeral=true, content='This is not your carrier channel.');
-            elif(authResponse==-2): await ctx.response.send_message(ephemeral=true, content='This is not your channel. Maybe get one first.');
+            if(authResponse==-1): await ctx.response.send_message(ephemeral=True, content='This is not your carrier channel.');
+            elif(authResponse==-2): await ctx.response.send_message(ephemeral=True, content='This is not your channel. Maybe get one first.');
+
+            carrier:Carrier=self.GetCarrier(ctx.channel);
+            if(departure_system=='' and carrier != None): departure_system=carrier.current_system;
 
             departureOffset = minutes*60+hours*3600;
             response = f'''
