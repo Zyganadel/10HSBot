@@ -73,6 +73,7 @@ class CarrierHandler:
 
             carrier:Carrier=self.GetCarrier(ctx.channel);
             if(departure_system=='' and carrier != None): departure_system=carrier.current_system;
+            carrier.target_system=destination_system;
 
             departureOffset = minutes*60+hours*3600;
             response = f'''
