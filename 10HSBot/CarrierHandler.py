@@ -55,7 +55,7 @@ class CarrierHandler:
         # if the user has no carrier, let them know.
         return -2;
 
-    def GetCarrier(self, channel:TextChannel)->Carrier:
+    def GetCarrier(self, channel:TextChannel):
         for carrier in self.carriers:
             # cast so we can access things easier.
             if(type(carrier)!=Carrier): continue;
@@ -78,7 +78,7 @@ class CarrierHandler:
 
         @self.tree.command(name='schedule-jump', description='possibly unstable')
         async def TreeSchedule(ctx:Interaction, destination_system:str, departure_system:str='', hours:int=0, minutes:int=0):
-            authResponse=self.OwnerOrRoleAuthCheck();
+            authResponse=self.OwnerOrRoleAuthCheck(user=ctx.user,channel=ctx.channel);
             if(authResponse==-1): await ctx.response.send_message(ephemeral=True, content='This is not your carrier channel.');
             elif(authResponse==-2): await ctx.response.send_message(ephemeral=True, content='This is not your channel. Maybe get one first.');
 
@@ -157,10 +157,10 @@ def loadIndividual(guild:Guild, file:str)->Carrier:
         
         f=open(file);
         # each arg should be on a separate line.
-        cid=f.readline();
-        oid=f.readline();
-        carrier=Carrier(guild,int(cid),int(oid),f.readline(),f.readline());
-        carrier.current_system=f.readline();
+        cid=trimstring(f.readline());
+        oid=trimstring(f.readline());
+        carrier=Carrier(guild,int(cid),int(oid),trimstring(f.readline()),trimstring(f.readline()));
+        carrier.current_system=trimstring(f.readline());
         f.close();
         return carrier; 
     except BaseException as e:
@@ -190,7 +190,7 @@ def load(guild:Guild, file:str)->list:
         files = f.readlines();
         for x in files:
             # Remove escape char.
-            x=x[:len(x)-1];
+            x=trimstring(x);
             carriers.append(loadIndividual(guild,f'data\\{x}.cdat'));
             continue;
         f.close();        
@@ -214,3 +214,6 @@ def save(file:str, carriers:list):
     f.writelines(lines);
     f.close();
     pass;
+
+def trimstring(s:str,trimLength:int=-1)->str:
+    return s[:len(s)+trimLength];
