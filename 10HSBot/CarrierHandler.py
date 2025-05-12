@@ -54,6 +54,17 @@ class CarrierHandler:
             pass;
         # if the user has no carrier, let them know.
         return -2;
+
+    def GetCarrier(self, channel:TextChannel)->Carrier:
+        for carrier in self.carriers:
+            # cast so we can access things easier.
+            if(type(carrier)!=Carrier): continue;
+            c:Carrier=carrier;
+
+            if(c.channel==channel): return c;
+            continue;
+        pass;
+
     # Region for commands.
     def CreateCmds(self, bot, tree):
         # a debug command to test things.
