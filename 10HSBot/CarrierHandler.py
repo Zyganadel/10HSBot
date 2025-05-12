@@ -84,7 +84,7 @@ Carrier {ctx.channel.name} has scheduled a jump.
             # after its saved, inform the user.
             message:str
             if(ping):message = f'Registered carrier {name} ({carrierid}) for <@{owner}> in this channel.';
-            else:message = f'Registered carrier {name} ({carrierid}) for {ctx.guild.get_member(owner).name} in this channel.';
+            else:message = f'Registered carrier {name} ({carrierid}) for {ctx.guild.get_member(owner).nick} in this channel.';
             await ctx.response.send_message(message);
 
             pass;
@@ -115,6 +115,7 @@ class Carrier:
 
 def loadIndividual(guild:Guild, file:str)->Carrier:
     try:
+        
         f=open(file);
         # each arg should be on a separate line.
         cid=f.readline();
@@ -149,7 +150,9 @@ def load(guild:Guild, file:str)->list:
         f=open(file);
         files = f.readlines();
         for x in files:
-            carriers.append(loadIndividual(guild,x));
+            # Remove escape char.
+            x=x[:len(x)-1];
+            carriers.append(loadIndividual(guild,f'data\\{x}.cdat'));
             continue;
         f.close();        
     except BaseException as e:
@@ -163,9 +166,10 @@ def save(file:str, carriers:list):
         # cast so we can access things easier.
         if(type(x)!=Carrier): continue;
         c:Carrier=x;
-        fname=f'data\\{c.carrierid}.cdat';
+        name=c.carrierid;
+        fname=f'data\\{name}.cdat';
         saveIndividual(fname,c);
-        lines.append(fname);
+        lines.append(name+'\n');
         continue;
     f=open(file,'wt');
     f.writelines(lines);
