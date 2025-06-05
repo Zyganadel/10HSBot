@@ -1,5 +1,6 @@
 import asyncio
 from datetime import datetime, timezone
+import os
 import time
 from unittest.mock import Base
 import discord;
@@ -45,12 +46,14 @@ class my_class(object):
         # when someone joins, create a file for them to track whether or not they've opted in.
         @self.bot.event
         async def on_member_join(member: Member):
-
+            file = open(f'data\\{member.id}.mdat', 'wt');
+            file.write('0\n0');
             pass;
 
+        # when someone leaves, delete the file used to store their data.
         @self.bot.event
         async def on_member_leave(member: Member):
-
+            os.remove(f'data\\{member.id}.mdat');
             pass;
 
         @self.tree.command(name='opt-in-or-out', description='opts in or out of the activity tracker.')
