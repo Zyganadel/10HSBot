@@ -15,6 +15,7 @@ from InaraHelper import InaraData
 
 intents = discord.Intents.default();
 intents.members=True;
+intents.voice_states=True;
 intents.message_content = True;
 
 encoder = json.JSONEncoder();
