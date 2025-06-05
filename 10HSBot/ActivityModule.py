@@ -79,7 +79,7 @@ class Pilot:
         self.userID=userID;
         self.optStatus=status;
         self.vcTime=vct;
-        self.eliteTime.et;
+        self.eliteTime=et;
         pass;
 
     pass;
