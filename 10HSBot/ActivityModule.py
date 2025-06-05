@@ -2,15 +2,15 @@ import asyncio
 from datetime import datetime, timezone
 import os
 import time
-from unittest.mock import Base
 import discord;
 import discord.ext.commands;
+import CarrierHandler;
 from discord import Guild, Interaction, Member, TextChannel, app_commands;
 from discord.ext.commands import Bot, Context;
 
 indexFileName:str='data\\userIndex.txt';
 
-class my_class(object):
+class ActivityManager(object):
 
     bot:Bot;
     tree:app_commands.CommandTree;
@@ -47,7 +47,9 @@ class my_class(object):
         @self.bot.event
         async def on_member_join(member: Member):
             file = open(f'data\\{member.id}.mdat', 'wt');
-            file.write('0\n0');
+
+            # fill the file with default values.
+            file.write('True\n0\n0');
             pass;
 
         # when someone leaves, delete the file used to store their data.
@@ -63,4 +65,37 @@ class my_class(object):
 
         pass;
 
+    pass;
+
+class Pilot:
+    userID:int;
+    optStatus:bool=True;
+
+    vcTime:int=0;
+    eliteTime:int=0;
+
+    def __init__(self,userID,status,vct,et):
+        self.userID=userID;
+        self.optStatus=status;
+        self.vcTime=vct;
+        self.eliteTime.et;
+        pass;
+
+    pass;
+
+def load(member:Member)->Pilot:
+    file = open(f'data\\{member.id}.mdat', 'rt');
+    status=bool(CarrierHandler.trimstring(file.readline()));
+    vct=int(CarrierHandler.trimstring(file.readline()));
+    et=int(CarrierHandler.trimstring(file.readline()));
+
+    value = Pilot(member.id,status,vct,et);
+    pass;
+
+def save(pilot:Pilot):
+    file = open(f'data\\{pilot.userID}.mdat', 'wt');
+    lines = [''];
+    lines.append(f'{pilot.optStatus}\n');
+    lines.append(f'{pilot.vcTime}\n');
+    lines.append(f'{pilot.eliteTime}\n');
     pass;
