@@ -100,5 +100,6 @@ def save(pilot:Pilot):
     lines.append(f'{pilot.optStatus}\n');
     lines.append(f'{pilot.vcTime}\n');
     lines.append(f'{pilot.eliteTime}\n');
+    file.writelines(lines);
     file.close();
     pass;
