@@ -40,8 +40,24 @@ class my_class(object):
             pass;
         return state;
 
-    pass
+    def CreateCommands(self,bot,tree):
 
+        # when someone joins, create a file for them to track whether or not they've opted in.
+        @self.bot.event
+        async def on_member_join(member: Member):
 
+            pass;
 
+        @self.bot.event
+        async def on_member_leave(member: Member):
 
+            pass;
+
+        @self.tree.command(name='opt-in-or-out', description='opts in or out of the activity tracker.')
+        async def OptInOut(ctx:Interaction, state:bool):
+
+            pass;
+
+        pass;
+
+    pass;
