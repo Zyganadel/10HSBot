@@ -41,7 +41,7 @@ class ActivityManager(object):
             pass;
         return state;
 
-    def CreateCommands(self,bot,tree):
+    def CreateCmds(self,bot,tree):
 
         # when someone joins, create a file for them to track whether or not they've opted in.
         @self.bot.event
@@ -50,6 +50,7 @@ class ActivityManager(object):
 
             # fill the file with default values.
             file.write('True\n0\n0');
+            file.close();
             pass;
 
         # when someone leaves, delete the file used to store their data.
@@ -90,6 +91,7 @@ def load(member:Member)->Pilot:
     et=int(CarrierHandler.trimstring(file.readline()));
 
     value = Pilot(member.id,status,vct,et);
+    file.close();
     pass;
 
 def save(pilot:Pilot):
@@ -98,4 +100,5 @@ def save(pilot:Pilot):
     lines.append(f'{pilot.optStatus}\n');
     lines.append(f'{pilot.vcTime}\n');
     lines.append(f'{pilot.eliteTime}\n');
+    file.close();
     pass;

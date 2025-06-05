@@ -8,6 +8,7 @@ from discord.abc import Snowflake
 import requests
 import json
 
+from ActivityModule import ActivityManager
 from CarrierHandler import CarrierHandler
 from InaraHelper import InaraHelper
 from InaraHelper import InaraData
@@ -54,6 +55,7 @@ except OSError as e:
 client = discord.Client(intents=intents);
 bot = discord.ext.commands.Bot(command_prefix='h!', intents=intents);
 ch = CarrierHandler(bot);
+am = ActivityManager(bot);
 
 tree:app_commands.CommandTree = bot.tree;
 
@@ -64,6 +66,7 @@ async def on_ready():
     await bot.tree.sync();
     print(f'Have {len(bot.commands)} commands.');
     ch.PostInit();
+    am.PostInit();
     print(f'Initialized carrier system, we have {len(ch.carriers)} carriers.');
     pass;
 
