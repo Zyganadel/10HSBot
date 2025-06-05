@@ -58,9 +58,9 @@ class ActivityManager(object):
             os.remove(f'data\\{member.id}.mdat');
             pass;
 
-        @self.tree.command(name='opt-in-or-out', description='opts in or out of the activity tracker.')
+        @self.tree.command(name='opt-in-or-out', description='opts in or out of the activity tracker, and clears any status.')
         async def OptInOut(ctx:Interaction, state:bool):
-
+            save(Pilot(ctx.user,state,0,0));
             pass;
 
         pass;
