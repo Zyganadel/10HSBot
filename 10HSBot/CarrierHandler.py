@@ -32,7 +32,7 @@ class CarrierHandler:
 
     # check if a user is permitted to use an elevated command. Only 1st LT. Cmdr. and above should be using carrier system without permission.
     def RoleAuthCheck(self, user:Member)->bool:
-        fltc_role = user.guild.get_role(1370501242597675099);
+        fltc_role = user.guild.get_role(1373375095992750120);
         alpha_role = user.guild.get_role(769795073030094888);
         return fltc_role in user.roles or alpha_role in user.roles;
 
